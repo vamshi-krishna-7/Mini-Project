@@ -1,51 +1,6 @@
-.not-found-container {
+.notfound-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  height: 100vh;
-}
-.not-found-img-desktop {
-  width: 400px;
-}
-
-.not-found-img-mobile {
-  display: none;
-}
-
-.heading {
-  font-size: 24px;
-  font-weight: 500;
-  text-align: center;
-  font-family: Inter;
-  line-height: 32px;
-}
-.pargraph {
-  font-size: 16px;
-  font-weight: 400;
-  font-family: Inter;
-  text-align: center;
-  line-height: 24px;
-}
-
-@media screen and (max-width: 768px) {
-  .not-found-img-mobile {
-    width: 200px;
-  }
-  .not-found-img-desktop {
-    display: none;
-  }
-  .heading {
-    font-size: 16px;
-    font-weight: 500;
-    text-align: center;
-    font-family: Inter;
-  }
-  .pargraph {
-    font-size: 14px;
-    font-weight: 400;
-    font-family: Inter;
-    text-align: center;
-    line-height: 24px;
-  }
+  justify-content: center;
 }

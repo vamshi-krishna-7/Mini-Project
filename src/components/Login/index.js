@@ -1,19 +1,19 @@
+import {Redirect} from 'react-router-dom'
 import {Component} from 'react'
 import Cookies from 'js-cookie'
-import {Redirect} from 'react-router-dom'
-
-import {PiUserCircleLight} from 'react-icons/pi'
-import {CgLock} from 'react-icons/cg'
-
 import './index.css'
 
 class Login extends Component {
   state = {
     username: '',
     password: '',
-    showSubmitError: false,
     errorMsg: '',
-    isChecked: false,
+    showError: false,
+    showPassword: false,
+  }
+
+  onClickShowPassword = () => {
+    this.setState(prevState => ({showPassword: !prevState.showPassword}))
   }
 
   onChangeUsername = event => {
@@ -24,25 +24,36 @@ class Login extends Component {
     this.setState({password: event.target.value})
   }
 
-  onChangeCheckBox = () => {
-    this.setState(prevState => ({isChecked: !prevState.isChecked}))
+  renderPasswordField = () => {
+    const {password, showPassword} = this.state
+    return (
+      <>
+        <label className="input-label" htmlFor="password">
+          PASSWORD
+        </label>
+        <input
+          type={showPassword ? 'text' : 'password'}
+          id="password"
+          className="password-input-filed"
+          value={password}
+          onChange={this.onChangePassword}
+        />
+      </>
+    )
   }
 
   onSubmitSuccess = jwtToken => {
     const {history} = this.props
 
-    Cookies.set('jwt_token', jwtToken, {
-      expires: 30,
-      path: '/',
-    })
+    Cookies.set('jwt_token', jwtToken, {expires: 30})
     history.replace('/')
   }
 
   onSubmitFailure = errorMsg => {
-    this.setState({showSubmitError: true, errorMsg})
+    this.setState({showError: true, errorMsg})
   }
 
-  submitForm = async event => {
+  onSubmitForm = async event => {
     event.preventDefault()
     const {username, password} = this.state
     const userDetails = {username, password}
@@ -60,29 +71,6 @@ class Login extends Component {
     }
   }
 
-  renderPasswordField = () => {
-    const {password, isChecked} = this.state
-    const passShowHide = isChecked ? 'text' : 'password'
-    return (
-      <>
-        <label className="input-label" htmlFor="password">
-          PASSWORD
-        </label>
-
-        <div className="user-pass-input-container">
-          <CgLock />
-          <input
-            type={passShowHide}
-            id="password"
-            className="password-input-field"
-            value={password}
-            onChange={this.onChangePassword}
-          />
-        </div>
-      </>
-    )
-  }
-
   renderUsernameField = () => {
     const {username} = this.state
     return (
@@ -90,56 +78,49 @@ class Login extends Component {
         <label className="input-label" htmlFor="username">
           USERNAME
         </label>
-        <div className="user-pass-input-container">
-          <PiUserCircleLight className="user-icon" />
-          <input
-            type="text"
-            id="username"
-            className="username-input-field"
-            value={username}
-            onChange={this.onChangeUsername}
-          />
-        </div>
+        <input
+          type="text"
+          id="username"
+          className="username-input-filed"
+          value={username}
+          onChange={this.onChangeUsername}
+        />
       </>
     )
   }
 
   render() {
-    const {showSubmitError, errorMsg, isChecked} = this.state
+    const {showError, errorMsg} = this.state
     const jwtToken = Cookies.get('jwt_token')
     if (jwtToken !== undefined) {
       return <Redirect to="/" />
     }
-
     return (
-      <div className="login-form-container">
-        <form className="form-container" onSubmit={this.submitForm}>
+      <div className="bg-container">
+        <form onSubmit={this.onSubmitForm} className="form-container">
           <img
-            src="https://i.ibb.co/zfS2zQr/Logo-2.png"
-            className="login-website-logo"
+            src="https://res.cloudinary.com/dezjxjqqp/image/upload/v1708872734/Logo_1_shlmtf.jpg"
             alt="login website logo"
+            className="website-logo"
           />
           <div className="input-container">{this.renderUsernameField()}</div>
           <div className="input-container">{this.renderPasswordField()}</div>
           <div className="checkbox-container">
             <input
-              id="check-box"
+              className="check-box"
               type="checkbox"
-              onChange={this.onChangeCheckBox}
-              checked={isChecked}
+              id="checkbox"
+              onChange={this.onClickShowPassword}
             />
-            <label htmlFor="check-box" className="input-label">
-              Show Password
-            </label>
+            <label htmlFor="checkbox">Show Password</label>
           </div>
           <button type="submit" className="login-button">
             Login
           </button>
-          {showSubmitError && <p className="error-message">*{errorMsg}</p>}
+          {showError && <p className="error-message">*{errorMsg}</p>}
         </form>
       </div>
     )
   }
 }
-
 export default Login
