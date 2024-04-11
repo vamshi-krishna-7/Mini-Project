@@ -1,5 +1,5 @@
 import {Component} from 'react'
-import {Route, Switch, Redirect} from 'react-router-dom'
+import {Route, Switch} from 'react-router-dom'
 import Login from './components/Login'
 import Home from './components/Home'
 import Cart from './components/Cart'
@@ -106,8 +106,7 @@ class App extends Component {
           <Route exact path="/login" component={Login} />
           <ProtectedRoute exact path="/" component={Home} />
           <ProtectedRoute exact path="/cart" component={Cart} />
-          <Route path="/not-found" component={NotFound} />
-          <Redirect to="not-found" />
+          <Route component={NotFound} />
         </Switch>
       </CartContext.Provider>
     )
